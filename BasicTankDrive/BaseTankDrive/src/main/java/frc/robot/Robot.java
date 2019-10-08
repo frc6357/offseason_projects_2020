@@ -10,6 +10,10 @@
     import edu.wpi.first.wpilibj.TimedRobot;
     import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
     import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+    import edu.wpi.first.wpilibj.SpeedController;
+    import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
+    import frc.robot.*;
 
     /**
      * The VM is configured to automatically run this class, and to call the
@@ -23,6 +27,10 @@
     private static final String kCustomAuto = "My Auto";
     private String m_autoSelected;
     private final SendableChooser<String> m_chooser = new SendableChooser<>();
+    private static SpeedController frontLeftSide;
+    private static SpeedController rearLeftSide;
+    private static SpeedController frontRightSide;
+    private static SpeedController rearRightSide;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -33,6 +41,8 @@
         m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
         m_chooser.addOption("My Auto", kCustomAuto);
         SmartDashboard.putData("Auto choices", m_chooser);
+        frontLeftSide = new WPI_VictorSPX(Ports.driveLeftFrontMotor);
+        frontRightSide = new WPI_VictorSPX(Ports.driveRightFrontMotor);
     }
 
     /**
