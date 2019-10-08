@@ -8,12 +8,16 @@
     package frc.robot;
 
     import edu.wpi.first.wpilibj.TimedRobot;
-    import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
     import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
     import edu.wpi.first.wpilibj.SpeedController;
+    import edu.wpi.first.wpilibj.SpeedControllerGroup;
+
     import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
-    import frc.robot.*;
+
+    //import frc.robot.*; ------- not used because we dont have a robot
 
     /**
      * The VM is configured to automatically run this class, and to call the
@@ -27,10 +31,14 @@
     private static final String kCustomAuto = "My Auto";
     private String m_autoSelected;
     private final SendableChooser<String> m_chooser = new SendableChooser<>();
+    
     private static SpeedController frontLeftSide;
-    private static SpeedController rearLeftSide;
+    private static SpeedController rearLeftSide; 
     private static SpeedController frontRightSide;
     private static SpeedController rearRightSide;
+    private static SpeedController middleLeftSide;
+    private static SpeedController middleRightSide;
+    private static DifferentialDrive m_drive; 
 
     /**
      * This function is run when the robot is first started up and should be
@@ -41,8 +49,19 @@
         m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
         m_chooser.addOption("My Auto", kCustomAuto);
         SmartDashboard.putData("Auto choices", m_chooser);
+        //Defining motors
         frontLeftSide = new WPI_VictorSPX(Ports.driveLeftFrontMotor);
         frontRightSide = new WPI_VictorSPX(Ports.driveRightFrontMotor);
+        rearLeftSide = new WPI_VictorSPX(Ports.driveLeftRearMotor);
+        rearRightSide = new WPI_VictorSPX(Ports.driveRightRearMotor);
+        middleRightSide = new WPI_VictorSPX(Ports.driveRightMiddleMotor);
+        middleLeftSide = new WPI_VictorSPX(Ports.driveLeftMiddleMotor);
+        // DifferentialDrive setup
+        SpeedControllerGroup m_left = new SpeedControllerGroup(frontLeftSide,middleLeftSide,rearLeftSide);
+        SpeedControllerGroup m_right = new SpeedControllerGroup(frontRightSide,middleRightSide,rearRightSide);
+        m_drive = new DifferentialDrive(m_left, m_right);
+
+
     }
 
     /**
@@ -98,6 +117,9 @@
     public void teleopPeriodic() 
     {
         // TODO: Make extensive use of the tankDrive and DifferentialDrive classes, they have very powerful systems for writing basic code
+        //m_drive.tankDrive(leftStick.getY(), rightStick.getY()); need to define leftStick and rightStick
+
+
     }
 
     /**
