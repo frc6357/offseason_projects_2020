@@ -1,76 +1,84 @@
-    /*----------------------------------------------------------------------------*/
-    /* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
-    /* Open Source Software - may be modified and shared by FRC teams. The code   */
-    /* must be accompanied by the FIRST BSD license file in the root directory of */
-    /* the project.                                                               */
-    /*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
 
-    package frc.robot;
+package frc.robot;
 
-    import edu.wpi.first.wpilibj.TimedRobot;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-    import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-    import edu.wpi.first.wpilibj.SpeedController;
-    import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-    import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+//import frc.robot.*; ------- not used because we dont have a robot
 
-
-    //import frc.robot.*; ------- not used because we dont have a robot
-
-    /**
-     * The VM is configured to automatically run this class, and to call the
-     * functions corresponding to each mode, as described in the TimedRobot
-     * documentation. If you change the name of this class or the package after
-     * creating this project, you must also update the build.gradle file in the
-     * project.
-     */
-    public class Robot extends TimedRobot {
+/**
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to each mode, as described in the TimedRobot
+ * documentation. If you change the name of this class or the package after
+ * creating this project, you must also update the build.gradle file in the
+ * project.
+ */
+public class Robot extends TimedRobot {
     private static final String kDefaultAuto = "Default";
     private static final String kCustomAuto = "My Auto";
     private String m_autoSelected;
     private final SendableChooser<String> m_chooser = new SendableChooser<>();
-    
+
     private static SpeedController frontLeftSide;
-    private static SpeedController rearLeftSide; 
+    private static SpeedController rearLeftSide;
     private static SpeedController frontRightSide;
     private static SpeedController rearRightSide;
-    private static SpeedController middleLeftSide;
-    private static SpeedController middleRightSide;
-    private static DifferentialDrive m_drive; 
+    // private static SpeedController middleLeftSide;
+    // private static SpeedController middleRightSide;
+    private static DifferentialDrive m_drive;
+    private Joystick driverJoystick; 
+    
 
     /**
-     * This function is run when the robot is first started up and should be
-     * used for any initialization code.
+     * This function is run when the robot is first started up and should be used
+     * for any initialization code.
      */
     @Override
     public void robotInit() {
         m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
         m_chooser.addOption("My Auto", kCustomAuto);
         SmartDashboard.putData("Auto choices", m_chooser);
-        //Defining motors
+        // Defining motors
         frontLeftSide = new WPI_VictorSPX(Ports.driveLeftFrontMotor);
         frontRightSide = new WPI_VictorSPX(Ports.driveRightFrontMotor);
         rearLeftSide = new WPI_VictorSPX(Ports.driveLeftRearMotor);
         rearRightSide = new WPI_VictorSPX(Ports.driveRightRearMotor);
-        middleRightSide = new WPI_VictorSPX(Ports.driveRightMiddleMotor);
-        middleLeftSide = new WPI_VictorSPX(Ports.driveLeftMiddleMotor);
+        // middleRightSide = new WPI_VictorSPX(Ports.driveRightMiddleMotor);
+        // middleLeftSide = new WPI_VictorSPX(Ports.driveLeftMiddleMotor);
         // DifferentialDrive setup
-        SpeedControllerGroup m_left = new SpeedControllerGroup(frontLeftSide,middleLeftSide,rearLeftSide);
-        SpeedControllerGroup m_right = new SpeedControllerGroup(frontRightSide,middleRightSide,rearRightSide);
+        frontRightSide.setInverted(true);
+        rearRightSide.setInverted(true);
+        SpeedControllerGroup m_left = new SpeedControllerGroup(frontLeftSide, rearLeftSide);
+        SpeedControllerGroup m_right = new SpeedControllerGroup(frontRightSide, rearRightSide);
         m_drive = new DifferentialDrive(m_left, m_right);
 
+        driverJoystick = new Joystick(Ports.driverJoystick);
+
+        
 
     }
 
     /**
-     * This function is called every robot packet, no matter the mode. Use
-     * this for items like diagnostics that you want ran during disabled,
-     * autonomous, teleoperated and test.
+     * This function is called every robot packet, no matter the mode. Use this for
+     * items like diagnostics that you want ran during disabled, autonomous,
+     * teleoperated and test.
      *
-     * <p>This runs after the mode specific periodic functions, but before
-     * LiveWindow and SmartDashboard integrated updating.
+     * <p>
+     * This runs after the mode specific periodic functions, but before LiveWindow
+     * and SmartDashboard integrated updating.
      */
     @Override
     public void robotPeriodic() {
@@ -78,14 +86,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
     /**
      * This autonomous (along with the chooser code above) shows how to select
-     * between different autonomous modes using the dashboard. The sendable
-     * chooser code works with the Java SmartDashboard. If you prefer the
-     * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-     * getString line to get the auto name from the text box below the Gyro
+     * between different autonomous modes using the dashboard. The sendable chooser
+     * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
+     * remove all of the chooser code and uncomment the getString line to get the
+     * auto name from the text box below the Gyro
      *
-     * <p>You can add additional auto modes by adding additional comparisons to
-     * the switch structure below with additional strings. If using the
-     * SendableChooser make sure to add them to the chooser code above as well.
+     * <p>
+     * You can add additional auto modes by adding additional comparisons to the
+     * switch structure below with additional strings. If using the SendableChooser
+     * make sure to add them to the chooser code above as well.
      */
     @Override
     public void autonomousInit() {
@@ -114,12 +123,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
      * This function is called periodically during operator control.
      */
     @Override
-    public void teleopPeriodic() 
-    {
-        // TODO: Make extensive use of the tankDrive and DifferentialDrive classes, they have very powerful systems for writing basic code
-        //m_drive.tankDrive(leftStick.getY(), rightStick.getY()); need to define leftStick and rightStick
+    public void teleopPeriodic() {
+        double leftY;
+        double rightY;
 
-
+        leftY = driverJoystick.getRawAxis(Ports.driverJoystickLeftY);
+        rightY = driverJoystick.getRawAxis(Ports.driverJoystickRightY);
+        m_drive.tankDrive(leftY, rightY);
     }
 
     /**
@@ -128,4 +138,4 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
     @Override
     public void testPeriodic() {
     }
-    }
+}

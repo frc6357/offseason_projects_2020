@@ -9,4 +9,9 @@ public class Ports
 
     public static final int driveRightMiddleMotor        = 13;   // CAN ID 
     public static final int driveLeftMiddleMotor         = 14;   // CAN ID 
+
+    public static final int driverJoystick               = 0;
+    public static final int driverJoystickLeftY          = 1;
+    public static final int driverJoystickRightY         = 5;
+    
 }
