@@ -61,6 +61,8 @@ public class Robot extends TimedRobot {
         // DifferentialDrive setup
         frontRightSide.setInverted(true);
         rearRightSide.setInverted(true);
+        frontLeftSide.setInverted(true);
+        rearLeftSide.setInverted(true);
         SpeedControllerGroup m_left = new SpeedControllerGroup(frontLeftSide, rearLeftSide);
         SpeedControllerGroup m_right = new SpeedControllerGroup(frontRightSide, rearRightSide);
         m_drive = new DifferentialDrive(m_left, m_right);
