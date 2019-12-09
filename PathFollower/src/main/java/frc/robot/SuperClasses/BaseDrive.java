@@ -28,14 +28,9 @@ public abstract class BaseDrive
      * - Type SpeedController <br>
      * - Right back motor controller
      */
-    public BaseDrive (SpeedController leftFront, SpeedController rightFront, SpeedController leftBack, SpeedController rightBack)
+    public BaseDrive()
     {
-        this.leftFront = leftFront;
-        this.leftBack = leftBack;
-        this.rightFront = rightFront;
-        this.rightBack = rightBack;
-        this.leftMotors = new SpeedControllerGroup(this.leftFront, this.leftBack);
-        this.rightMotors = new SpeedControllerGroup(this.rightFront, this.rightBack);
+
     }
 
     /**
@@ -120,5 +115,11 @@ public abstract class BaseDrive
     public double getRightSpeed()
     {
         return rightMotors.get();
+    }
+
+    public void setMotorGroups (SpeedControllerGroup leftMotorGroup, SpeedControllerGroup rightMotorGroup)
+    {
+        leftMotors = leftMotorGroup;
+        rightMotors = rightMotorGroup;
     }
 }
